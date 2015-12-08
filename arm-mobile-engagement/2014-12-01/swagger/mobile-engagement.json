@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "MobileEngagementClient",
-	"description": "The wrapper for the Mobile Engagement REST APIs.",
+    "description": "The wrapper for the Mobile Engagement REST APIs.",
     "version": "2014-12-01"
   },
   "host": "management.azure.com",
@@ -17,13 +17,135 @@
     "application/json",
     "text/json"
   ],
-  "paths": {
-  
+  "paths": {"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
+      "post": {
+        "operationId": "Test",
+        "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "description": "Authorization token.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Device identifier.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TestBodyParameter"
+            }
+          },
+          {
+            "$ref": "#/parameters/SubscriptionIdParameter"
+          },
+          {
+            "$ref": "#/parameters/ApiVersionParameter"
+          },
+          {
+            "$ref": "#/parameters/ResourceGroupNameParameter"
+          },
+          {
+            "$ref": "#/parameters/AppCollectionParameter"
+          },
+          {
+            "$ref": "#/parameters/AppNameParameter"
+          },
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Kind of campaign. Valid values are: announcements, polls, dataPushes, and nativePushes."
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Campaign identifier as returned by a call to Create campaign."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Test campaign queued successfully."
+          },
+          "400": {
+            "description": "Invalid parameters or application is disabled. Check response body for details."
+          },
+          "401": {
+            "description": "Authentication error."
+          },
+          "404": {
+            "description": "No campaign was found with the specified id."
+          }
+        }
+      }
+    }
   },
   "definitions": {
-  
+    "TestBodyParameter": {
+      "properties": {
+        "deviceId": {
+          "type": "string",
+          "description": "Device identifier (as returned by the SDK)."
+        },
+        "lang": {
+          "type": "string",
+          "description": "The language to test expressed using ISO 639-1 code. The default language of the campaign will be used if the parameter is not provided."
+        }
+      }
+    },
+    "TestResult": {
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Campaign identifier."
+        },
+        "state": {
+          "type": "string",
+          "queued, it means the test push is being processed and should be received soon on devices."
+        }
+      }
+    }
   },
   "parameters": {
-  
+    "SubscriptionIdParameter": {
+      "name": "subscriptionId",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "Azure SubscriptionId used as a URI path segment in API calls."
+    },
+    "ResourceGroupNameParameter": {
+      "name": "resourceGroupName",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "The name of the resource group."
+    },
+    "AppCollectionParameter": {
+      "name": "appCollection",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "App collection name."
+    },
+    "AppNameParameter": {
+      "name": "appName",
+      "in": "path",
+      "required": true,
+      "type": "string",
+      "description": "ResourceGroup name."
+    },
+    "ApiVersionParameter": {
+      "name": "api-version",
+      "in": "query",
+      "required": false,
+      "type": "string",
+      "description": "REST API Version."
+    }
   }
 }
