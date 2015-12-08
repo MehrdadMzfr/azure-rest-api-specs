@@ -23,20 +23,7 @@
         "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "description": "Authorization token.",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Device identifier.",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/TestBodyParameter"
-            }
+           "$ref": "#/parameters/AuthorizationParameter"
           },
           {
             "$ref": "#/parameters/SubscriptionIdParameter"
@@ -66,11 +53,23 @@
             "required": true,
             "type": "string",
             "description": "Campaign identifier as returned by a call to Create campaign."
+          },
+          {
+            "name": "parameters",
+            "in": "body",
+            "description": "Device identifier.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CampaignTestParameters"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Test campaign queued successfully."
+            "description": "Test campaign queued successfully.",
+            "schema": {
+              "$ref": "#/definitions/CampaignTestResult"
+            }
           },
           "400": {
             "description": "Invalid parameters or application is disabled. Check response body for details."
@@ -86,7 +85,7 @@
     }
   },
   "definitions": {
-    "TestBodyParameter": {
+    "CampaignTestParameters": {
       "properties": {
         "deviceId": {
           "type": "string",
@@ -98,7 +97,7 @@
         }
       }
     },
-    "TestResult": {
+    "CampaignTestResult": {
       "properties": {
         "id": {
           "type": "string",
@@ -106,12 +105,19 @@
         },
         "state": {
           "type": "string",
-          "queued, it means the test push is being processed and should be received soon on devices."
+          "description": "queued, it means the test push is being processed and should be received soon on devices."
         }
       }
     }
   },
   "parameters": {
+   "AuthorizationParameter": {
+      "name": "authorization",
+      "in": "header",
+      "description": "Authorization token.",
+      "required": true,
+      "type": "string"
+    },
     "SubscriptionIdParameter": {
       "name": "subscriptionId",
       "in": "path",
