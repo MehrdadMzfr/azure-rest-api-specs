@@ -1,157 +1,223 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "title": "MobileEngagementClient",
-    "description": "The wrapper for the Mobile Engagement REST APIs.",
-    "version": "2014-12-01"
-  },
-  "host": "management.azure.com",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json",
-    "text/json"
-  ],
-  "produces": [
-    "application/json",
-    "text/json"
-  ],
-  "paths": {"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
-      "post": {
-        "operationId": "Test",
-        "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
-        "parameters": [
-          {
-           "$ref": "#/parameters/AuthorizationParameter"
-          },
-          {
-            "$ref": "#/parameters/SubscriptionIdParameter"
-          },
-          {
-            "$ref": "#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "#/parameters/ResourceGroupNameParameter"
-          },
-          {
-            "$ref": "#/parameters/AppCollectionParameter"
-          },
-          {
-            "$ref": "#/parameters/AppNameParameter"
-          },
-          {
-            "name": "kind",
+    "swagger": "2.0",
+    "info": {
+        "title": "MobileEngagementClient",
+        "description": "The wrapper for the Mobile Engagement REST APIs.",
+        "version": "2014-12-01"
+    },
+    "host": "management.azure.com",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json",
+        "text/json"
+    ],
+    "produces": [
+        "application/json",
+        "text/json"
+    ],
+    "paths": {
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Action"
+                ],
+                "operationId": "Campaigns_Test",
+                "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Kind of campaign. Valid values are: announcements, polls, dataPushes, and nativePushes."
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Campaign identifier as returned by a call to Create campaign."
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    },
+                    {
+                        "name": "parameters",
+                        "in": "body",
+                        "description": "Parameters supplied to the Test Campaign operation.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CampaignTestParameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Test campaign queued successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or application is disabled. Check response body for details."
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "No campaign was found with the specified id."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/activate": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Action"
+                ],
+                "operationId": "Campaigns_Activate",
+                "description": "Activate a campaign previously created by a call to Create campaign.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Kind of campaign. Valid values are: announcements, polls, dataPushes, and nativePushes."
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "description": "Campaign identifier as returned by a call to Create campaign."
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activated successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Campaign not in `draft` state.\n  \nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "CampaignTestParameters": {
+            "properties": {
+                "deviceId": {
+                    "type": "string",
+                    "description": "Device identifier (as returned by the SDK)."
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "The language to test expressed using ISO 639-1 code. The default language of the campaign will be used if the parameter is not provided."
+                }
+            }
+        },
+        "CampaignStateResult": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "Campaign identifier."
+                },
+                "state": {
+                    "type": "string",
+                    "description": "New state of the campaign, or 'queued' when testing a campaign."
+                }
+            }
+        }
+    },
+    "parameters": {
+        "SubscriptionIdParameter": {
+            "name": "subscriptionId",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Kind of campaign. Valid values are: announcements, polls, dataPushes, and nativePushes."
-          },
-          {
-            "name": "id",
+            "description": "Gets subscription credentials which uniquely identify Microsoft Azure subscription. The subscription ID forms part of the URI for every service call."
+        },
+        "ApiVersionParameter": {
+            "name": "api-version",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "description": "Client Api Version."
+        },
+        "AuthorizationParameter": {
+            "name": "authorization",
+            "in": "header",
+            "description": "Authorization token.",
+            "required": true,
+            "type": "string"
+        },
+        "ResourceGroupNameParameter": {
+            "name": "resourceGroupName",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Campaign identifier as returned by a call to Create campaign."
-          },
-          {
-            "name": "parameters",
-            "in": "body",
-            "description": "Device identifier.",
+            "description": "The name of the resource group."
+        },
+        "AppCollectionParameter": {
+            "name": "appCollection",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/CampaignTestParameters"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Test campaign queued successfully.",
-            "schema": {
-              "$ref": "#/definitions/CampaignTestResult"
-            }
-          },
-          "400": {
-            "description": "Invalid parameters or application is disabled. Check response body for details."
-          },
-          "401": {
-            "description": "Authentication error."
-          },
-          "404": {
-            "description": "No campaign was found with the specified id."
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "CampaignTestParameters": {
-      "properties": {
-        "deviceId": {
-          "type": "string",
-          "description": "Device identifier (as returned by the SDK)."
+            "type": "string",
+            "description": "Application collection."
         },
-        "lang": {
-          "type": "string",
-          "description": "The language to test expressed using ISO 639-1 code. The default language of the campaign will be used if the parameter is not provided."
+        "AppNameParameter": {
+            "name": "appName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Application resource name."
         }
-      }
-    },
-    "CampaignTestResult": {
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Campaign identifier."
-        },
-        "state": {
-          "type": "string",
-          "description": "queued, it means the test push is being processed and should be received soon on devices."
-        }
-      }
     }
-  },
-  "parameters": {
-   "AuthorizationParameter": {
-      "name": "authorization",
-      "in": "header",
-      "description": "Authorization token.",
-      "required": true,
-      "type": "string"
-    },
-    "SubscriptionIdParameter": {
-      "name": "subscriptionId",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "Azure SubscriptionId used as a URI path segment in API calls."
-    },
-    "ResourceGroupNameParameter": {
-      "name": "resourceGroupName",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The name of the resource group."
-    },
-    "AppCollectionParameter": {
-      "name": "appCollection",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "App collection name."
-    },
-    "AppNameParameter": {
-      "name": "appName",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "ResourceGroup name."
-    },
-    "ApiVersionParameter": {
-      "name": "api-version",
-      "in": "query",
-      "required": false,
-      "type": "string",
-      "description": "REST API Version."
-    }
-  }
 }
