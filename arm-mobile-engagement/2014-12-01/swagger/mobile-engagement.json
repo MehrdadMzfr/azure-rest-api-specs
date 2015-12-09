@@ -10,12 +10,10 @@
         "https"
     ],
     "consumes": [
-        "application/json",
-        "text/json"
+        "application/json"
     ],
     "produces": [
-        "application/json",
-        "text/json"
+        "application/json"
     ],
     "paths": {
         "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
@@ -24,7 +22,7 @@
                     "Campaign",
                     "Action"
                 ],
-                "operationId": "Campaigns_Test",
+                "operationId": "Campaigns_TestSaved",
                 "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
                 "parameters": [
                     {
@@ -40,18 +38,10 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "name": "kind",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "description": "Kind of campaign. Valid values are: announcements, polls, dataPushes, and nativePushes."
+                        "$ref": "#/parameters/CampaignKindParameter"
                     },
                     {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "description": "Campaign identifier as returned by a call to Create campaign."
+                        "$ref": "#/parameters/CampaignIdParameter"
                     },
                     {
                         "$ref": "#/parameters/ApiVersionParameter"
@@ -110,18 +100,10 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "name": "kind",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "description": "Kind of campaign. Valid values are: announcements, polls, dataPushes, and nativePushes."
+                        "$ref": "#/parameters/CampaignKindParameter"
                     },
                     {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
-                        "type": "string",
-                        "description": "Campaign identifier as returned by a call to Create campaign."
+                        "$ref": "#/parameters/CampaignIdParameter"
                     },
                     {
                         "$ref": "#/parameters/ApiVersionParameter"
@@ -139,6 +121,112 @@
                     },
                     "400": {
                         "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Campaign not in `draft` state.\n  \nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/suspend": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Action"
+                ],
+                "operationId": "Campaigns_Suspend",
+                "description": "Suspend a Reach campaign previously activated by a call to Activate campaign.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Suspended successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Suspend action performed on a non scheduled campaign.\n  \nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/finish": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Action"
+                ],
+                "operationId": "Campaigns_Finish",
+                "description": "Finish a Reach campaign previously activated by a call to Activate campaign.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Finished successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Campaign not in `in progress` state.\n  \nCheck response body for details.\n"
                     },
                     "401": {
                         "description": "Authentication error."
@@ -166,7 +254,7 @@
         "CampaignStateResult": {
             "properties": {
                 "id": {
-                    "type": "string",
+                    "type": "integer",
                     "description": "Campaign identifier."
                 },
                 "state": {
@@ -192,7 +280,7 @@
             "description": "Client Api Version."
         },
         "AuthorizationParameter": {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "description": "Authorization token.",
             "required": true,
@@ -218,6 +306,26 @@
             "required": true,
             "type": "string",
             "description": "Application resource name."
+        },
+        "CampaignKindParameter": {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "enum": [
+                "announcements",
+                "polls",
+                "dataPushes",
+                "nativePushes"
+            ],
+            "description": "Campaign kind."
+        },
+        "CampaignIdParameter": {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "integer",
+            "description": "Campaign identifier."
         }
     }
 }
