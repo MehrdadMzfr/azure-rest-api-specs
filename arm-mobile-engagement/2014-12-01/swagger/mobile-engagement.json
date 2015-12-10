@@ -252,14 +252,76 @@
                 }
             }
         },
-        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
+      "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
+        "post": {
+          "tags": [
+            "Campaign",
+            "Test"
+          ],
+          "operationId": "Campaigns_TestSaved",
+          "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
+          "parameters": [
+            {
+              "$ref": "#/parameters/SubscriptionIdParameter"
+            },
+            {
+              "$ref": "#/parameters/ResourceGroupNameParameter"
+            },
+            {
+              "$ref": "#/parameters/AppCollectionParameter"
+            },
+            {
+              "$ref": "#/parameters/AppNameParameter"
+            },
+            {
+              "$ref": "#/parameters/CampaignKindParameter"
+            },
+            {
+              "$ref": "#/parameters/CampaignIdParameter"
+            },
+            {
+              "$ref": "#/parameters/ApiVersionParameter"
+            },
+            {
+              "$ref": "#/parameters/AuthorizationParameter"
+            },
+            {
+              "name": "parameters",
+              "in": "body",
+              "description": "Parameters supplied to the Test Campaign operation.",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/CampaignTestParameters"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Test campaign queued successfully.",
+              "schema": {
+                "$ref": "#/definitions/CampaignFullStateResult"
+              }
+            },
+            "400": {
+              "description": "Invalid parameters or application is disabled. Check response body for details."
+            },
+            "401": {
+              "description": "Authentication error."
+            },
+            "404": {
+              "description": "No campaign was found with the specified id."
+            }
+          }
+        }
+      },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/test": {
             "post": {
                 "tags": [
                     "Campaign",
                     "Test"
                 ],
-                "operationId": "Campaigns_TestSaved",
-                "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
+                "operationId": "Campaigns_TestNew",
+                "description": Test a new campaign on a set of devices.",
                 "parameters": [
                     {
                         "$ref": "#/parameters/SubscriptionIdParameter"
@@ -274,32 +336,46 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "$ref": "#/parameters/CampaignKindParameter"
-                    },
-                    {
-                        "$ref": "#/parameters/CampaignIdParameter"
-                    },
-                    {
                         "$ref": "#/parameters/ApiVersionParameter"
                     },
                     {
                         "$ref": "#/parameters/AuthorizationParameter"
                     },
                     {
-                        "name": "parameters",
-                        "in": "body",
-                        "description": "Parameters supplied to the Test Campaign operation.",
+                        "name": "kind",
+                        "in": "path",
                         "required": true,
-                        "schema": {
+                        "type": "string",
+                        "enum": [
+                            "announcements",
+                            "polls",
+                            "dataPushes",
+                            "nativePushes"
+                        ],
+                        "description": "Campaign kind."
+                    },
+                    {
+                      "name": "parameters",
+                      "in": "body",
+                      "description": "Parameters supplied to the Test Campaign operation.",
+                      "required": true,
+                      "schema": {
+                        "allOf": [
+                          {
+                            "$ref": "#/definitions/CampaignResource"
+                          },
+                          {
                             "$ref": "#/definitions/CampaignTestParameters"
-                        }
+                          }
+                        ]
+                      }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "Test campaign queued successfully.",
                         "schema": {
-                            "$ref": "#/definitions/CampaignStateResult"
+                            "$ref": "#/definitions/CampaignStateOnlyResult"
                         }
                     },
                     "400": {
@@ -488,11 +564,26 @@
             }
         },
         "CampaignStateResult": {
+            "allOf": [
+              {
+                "$ref": "#/definitions/CampaignStateResult"
+              },
+              {
+                "type": "string",
+                  "required": [
+                     "deviceId"
+                  ],
+                "properties": {
+                  "deviceId": {
+                    "type": "string",
+                    "description": "Device identifier (as returned by the SDK)."
+                    }
+                }
+              }
+            ]
+        },
+        "CampaignStateOnlyResult": {
             "properties": {
-                "id": {
-                    "type": "integer",
-                    "description": "Campaign identifier."
-                },
                 "state": {
                     "type": "string",
                     "description": "New state of the campaign, or 'queued' when testing a campaign.",
