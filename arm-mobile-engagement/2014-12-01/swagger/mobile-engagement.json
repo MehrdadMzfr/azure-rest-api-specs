@@ -16,6 +16,71 @@
         "application/json"
     ],
     "paths": {
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "CRUD"
+                ],
+                "operationId": "Campaigns_Create",
+                "description": "Create a Reach campaign (announcement, poll, data push or native push).",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    },
+                    {
+                        "name": "parameters",
+                        "in": "body",
+                        "description": "Parameters supplied to the Update Campaign operation.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CampaignResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success, campaign is returned.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        },
+                        "headers": {
+                            "Location": {
+                                "type": "string",
+                                "description": "URL path to get the created campaign."
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or application is disabled. Check response body for details."
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "409": {
+                        "description": "Another campaign with the same name already exists."
+                    }
+                }
+            }
+        },
         "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}": {
             "parameters": [
                 {
