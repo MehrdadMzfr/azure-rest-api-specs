@@ -277,6 +277,9 @@
             "in": "query",
             "required": true,
             "type": "string",
+            "enum": [
+                "2014-12-01"
+            ],
             "description": "Client Api Version."
         },
         "AuthorizationParameter": {
