@@ -299,7 +299,7 @@
             "200": {
               "description": "Test campaign queued successfully.",
               "schema": {
-                "$ref": "#/definitions/CampaignFullStateResult"
+                "$ref": "#/definitions/CampaignStateResult"
               }
             },
             "400": {
@@ -321,7 +321,7 @@
                     "Test"
                 ],
                 "operationId": "Campaigns_TestNew",
-                "description": Test a new campaign on a set of devices.",
+                "description": "Test a new campaign on a set of devices.",
                 "parameters": [
                     {
                         "$ref": "#/parameters/SubscriptionIdParameter"
@@ -566,7 +566,7 @@
         "CampaignStateResult": {
             "allOf": [
               {
-                "$ref": "#/definitions/CampaignStateResult"
+                "$ref": "#/definitions/CampaignStateOnlyResult"
               },
               {
                 "type": "string",
