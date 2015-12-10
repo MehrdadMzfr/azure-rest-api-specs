@@ -1,157 +1,850 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "title": "MobileEngagementClient",
-    "description": "The wrapper for the Mobile Engagement REST APIs.",
-    "version": "2014-12-01"
-  },
-  "host": "management.azure.com",
-  "schemes": [
-    "https"
-  ],
-  "consumes": [
-    "application/json",
-    "text/json"
-  ],
-  "produces": [
-    "application/json",
-    "text/json"
-  ],
-  "paths": {"/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
-      "post": {
-        "operationId": "Test",
-        "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
-        "parameters": [
-          {
-           "$ref": "#/parameters/AuthorizationParameter"
-          },
-          {
-            "$ref": "#/parameters/SubscriptionIdParameter"
-          },
-          {
-            "$ref": "#/parameters/ApiVersionParameter"
-          },
-          {
-            "$ref": "#/parameters/ResourceGroupNameParameter"
-          },
-          {
-            "$ref": "#/parameters/AppCollectionParameter"
-          },
-          {
-            "$ref": "#/parameters/AppNameParameter"
-          },
-          {
+    "swagger": "2.0",
+    "info": {
+        "title": "MobileEngagementClient",
+        "description": "The wrapper for the Mobile Engagement REST APIs.",
+        "version": "2014-12-01"
+    },
+    "host": "management.azure.com",
+    "schemes": [
+        "https"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "CRUD"
+                ],
+                "operationId": "Campaigns_Create",
+                "description": "Create a Reach campaign (announcement, poll, data push or native push).",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    },
+                    {
+                        "name": "parameters",
+                        "in": "body",
+                        "description": "Parameters supplied to the Update Campaign operation.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CampaignResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success, campaign is returned.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        },
+                        "headers": {
+                            "Location": {
+                                "type": "string",
+                                "description": "URL path to get the created campaign."
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or application is disabled. Check response body for details."
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "409": {
+                        "description": "Another campaign with the same name already exists."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/SubscriptionIdParameter"
+                },
+                {
+                    "$ref": "#/parameters/ResourceGroupNameParameter"
+                },
+                {
+                    "$ref": "#/parameters/AppCollectionParameter"
+                },
+                {
+                    "$ref": "#/parameters/AppNameParameter"
+                },
+                {
+                    "$ref": "#/parameters/CampaignKindParameter"
+                },
+                {
+                    "$ref": "#/parameters/CampaignIdParameter"
+                },
+                {
+                    "$ref": "#/parameters/ApiVersionParameter"
+                },
+                {
+                    "$ref": "#/parameters/AuthorizationParameter"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Campaign",
+                    "CRUD"
+                ],
+                "operationId": "Campaigns_Get",
+                "description": "The Get campaign operation retrieves information about a previously created campaign.",
+                "responses": {
+                    "200": {
+                        "description": "Success, campaign is returned.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignDetailedResource"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or application is disabled. Check response body for details."
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "Campaign",
+                    "CRUD"
+                ],
+                "operationId": "Campaigns_Update",
+                "description": "The Get campaign operation retrieves information about a previously created campaign.",
+                "parameters": [
+                    {
+                        "name": "parameters",
+                        "in": "body",
+                        "description": "Parameters supplied to the Update Campaign operation.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CampaignResource"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Updated successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Campaign is not in `draft` state.\n\nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    },
+                    "409": {
+                        "description": "Another campaign with the same name already exists."
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Campaign",
+                    "CRUD"
+                ],
+                "operationId": "Campaigns_Delete",
+                "description": "Delete a campaign previously created by a call to Create campaign.",
+                "responses": {
+                    "200": {
+                        "description": "Deleted successfully."
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Campaign is not in `finished` state.\n\nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaignsByName/{kind}/{name}": {
+            "get": {
+                "tags": [
+                    "Campaign",
+                    "CRUD"
+                ],
+                "operationId": "Campaigns_GetByName",
+                "description": "The Get campaign operation retrieves information about a previously created campaign.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "Campaign name.",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success, campaign is returned.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignDetailedResource"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or application is disabled. Check response body for details."
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Test"
+                ],
+                "operationId": "Campaigns_TestSaved",
+                "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    },
+                    {
+                        "name": "parameters",
+                        "in": "body",
+                        "description": "Parameters supplied to the Test Campaign operation.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CampaignTestParameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Test campaign queued successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or application is disabled. Check response body for details."
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "No campaign was found with the specified id."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/activate": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Action"
+                ],
+                "operationId": "Campaigns_Activate",
+                "description": "Activate a campaign previously created by a call to Create campaign.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Activated successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Campaign not in `draft` state.\n  \nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/suspend": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Action"
+                ],
+                "operationId": "Campaigns_Suspend",
+                "description": "Suspend a Reach campaign previously activated by a call to Activate campaign.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Suspended successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Suspend action performed on a non scheduled campaign.\n  \nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/finish": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Action"
+                ],
+                "operationId": "Campaigns_Finish",
+                "description": "Finish a Reach campaign previously activated by a call to Activate campaign.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignKindParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/CampaignIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AuthorizationParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Finished successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Can be caused by one of the following conditions:\n\n  * Invalid parameters.\n  * Application is not enabled.\n  * Campaign not in `in progress` state.\n  \nCheck response body for details.\n"
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "Campaign not found."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "CampaignTestParameters": {
+            "properties": {
+                "deviceId": {
+                    "type": "string",
+                    "description": "Device identifier (as returned by the SDK)."
+                },
+                "lang": {
+                    "type": "string",
+                    "description": "The language to test expressed using ISO 639-1 code. The default language of the campaign will be used if the parameter is not provided."
+                }
+            }
+        },
+        "CampaignStateResult": {
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Campaign identifier."
+                },
+                "state": {
+                    "type": "string",
+                    "description": "New state of the campaign, or 'queued' when testing a campaign.",
+                    "enum": [
+                        "draft",
+                        "scheduled",
+                        "in-progress",
+                        "finished",
+                        "queued"
+                    ]
+                }
+            }
+        },
+        "CampaignResource": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Unique name of the campaign.",
+                    "maxLength": 64
+                },
+                "audience": {
+                    "type": "object",
+                    "description": "Specify which users will be targeted by this campaign. By default, all users will be targeted.\nIf you set `pushMode` property to `manual`, the only thing you can specify in the audience is the push quota filter.\n\nAn audience is a boolean expression made of criteria (variables) operators (“not”, “and” or “or”) and parenthesis. Additionally, a set of filters can be added to an audience.\n\n65535 bytes max as per JSON encoding.\n",
+                    "properties": {
+                        "expression": {
+                            "type": "string",
+                            "description": "Boolean expression made of criteria (variables) operators (“not”, “and” or “or”) and parenthesis.\nCriterion names in the audience expression must start with a capital letter and can only contain alphanumeric (A-Z,a-z,0-9) and underscore (_) characters.              \n"
+                        },
+                        "criteria": {
+                            "type": "object"
+                        },
+                        "filters": {
+                            "type": "array",
+                            "description": "Global filters that applied to everybody.",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "category": {
+                    "type": "string",
+                    "description": "Category of the campaign. Categories can be used on the application side to customize campaigns.",
+                    "maxLength": 64
+                },
+                "pushMode": {
+                    "type": "string",
+                    "description": "Announcements/polls only.\nDefines how the campaign is pushed. Valid values are:\n\n  * `real-time`: Never ending campaign, the campaign will be delivered to your existing users and also to your new users.\n  * `one-shot`: In this mode, the campaign will be delivered only to your existing users (campaign will stop after that).\n  * `manual`: In this mode, the campaign will not be pushed automatically to devices. You will have to use the Push campaign command to push the campaign to your end-users. Campaigns can be pushed multiple times to the same device.\n",
+                    "enum": [
+                        "real-time",
+                        "one-shot",
+                        "manual"
+                    ],
+                    "default": "real-time"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "Applicable only to announcements and data pushes.\n\nType of announcement. Valid values are:\n\n  * `text/plain`: Text-only announcement: `body` property should only contain plain text.\n  * `text/html`: HTML announcement: `body` attribute can contain HTML code.\n  * `only_notif`: Notification-only announcement. With this kind of announcements, the `body`, `title`, `actionButtonText` and `exitButtonText` are ignored.\n\nType of data push. Valid values are:\n\n  * `text/plain`: Text only data push: `body` property must be text plain.\n  * `text/base64`: Base 64 data push: `body` property must be encoded in base 64.\n",
+                    "enum": [
+                        "text/plain",
+                        "text/html",
+                        "only_notif",
+                        "text/base64"
+                    ]
+                },
+                "deliveryTime": {
+                    "type": "string",
+                    "description": "Announcements/polls only.\nDefines when the campaign should be delivered. Valid values are:\n\n  * `any`: Campaign will be delivered as soon as possible.\n  * `background`: iOS only. Campaign will be only delivered when the application is in background (out of app).\n  * `session`: Campaign will be delivered when the application is running.\n",
+                    "enum": [
+                        "any",
+                        "background",
+                        "session"
+                    ]
+                },
+                "deliveryActivities": {
+                    "type": "array",
+                    "description": "Announcements/polls only.\nArray containing the list of activities in which the campaign can be delivered.\ndeliveryTime must be set to session.\nIf the platform is iOS, this option can also be set if deliveryTime is set to any.\nIn that case, if the campaign is received when the application is launched,\nit will be delivered only in the specified list of activities.\n",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "startTime": {
+                    "type": "string",
+                    "description": "The date at which the campaign should be started.\nThe date shall conform to the following format: `yyyy-MM-dd HH:mm'Z'`.\n\n  * If you set pushMode property to manual, this attribute will be ignored.\n  * If you set pushMode property to one-shot, then the timezone attribute must be specified.\n\nExample: `2011-11-21 15:23Z`\n"
+                },
+                "endTime": {
+                    "type": "string",
+                    "description": "The date at which the campaign should be finished.\nThe date shall conform to the following format: `yyyy-MM-dd HH:mm'Z'`.\n\nExample: `2011-11-21 15:23Z`\n"
+                },
+                "timezone": {
+                    "type": "string",
+                    "description": "The id of the time zone to use for the startTime and endTime dates.\nIf not provided, the two date attributes will be expressed using the device timezone.\n\nExample: America/Los_Angeles\n"
+                },
+                "notificationType": {
+                    "type": "string",
+                    "description": "Android only.\nDefines how the notification should be displayed. Valid values are:\n\n  * `system`: Display the notification using a standard system notification.\n  * `popup`: Display the notification using a in-app banner notification.\n",
+                    "enum": [
+                        "system",
+                        "popup"
+                    ],
+                    "default": "popup"
+                },
+                "notificationIcon": {
+                    "type": "boolean",
+                    "description": "A flag indicating whether or not you want to display the resource icon in notification content.",
+                    "default": true
+                },
+                "notificationCloseable": {
+                    "type": "boolean",
+                    "description": "A flag indicating whether or not you want the notification to be closeable.",
+                    "default": true
+                },
+                "notificationVibrate": {
+                    "type": "boolean",
+                    "description": "Android only. A flag indicating whether or not you want the system notification to make a vibration. The notificationType property must be set to system.",
+                    "default": false
+                },
+                "notificationSound": {
+                    "type": "boolean",
+                    "description": "* `Android`: A flag indicating whether or not you want the system notification to make a sound. The `notificationType` property must be set to `system`.\n* `iOS`: A flag indicating whether or not you want the native Apple Push notification to make a sound. The `deliveryTime` property must be set to `any` or `background`. This will play the 'default' sound. If you want to play a custom sound, see the `notificationOptions` property.\n* `Windows`: A flag indicating whether or not you want the native Windows Notification Service to make a sound. The `deliveryTime` property must be set to `any`.\n",
+                    "default": false
+                },
+                "notificationBadge": {
+                    "type": "boolean",
+                    "description": "A flag indicating whether or not you want the native Apple Push notification to update the badge icon to the number of unread messages.\nThe `deliveryTime` property must be set to `any` or `background`.\n",
+                    "default": false
+                },
+                "notificationTitle": {
+                    "type": "string",
+                    "description": "Title of the notification. This field supports appInfo markers.",
+                    "maxLength": 2000
+                },
+                "notificationMessage": {
+                    "type": "string",
+                    "description": "Message of the notification. This field supports appInfo markers.",
+                    "maxLength": 4000
+                },
+                "notificationImage": {
+                    "type": "string",
+                    "format": "byte",
+                    "description": "Optional image encoded in base 64.\nUsually included in the right part of in app notifications (or as a banner if there is neither text nor content icon).\nFor Android system notifications, the image is used as the large icon (displayed only on Android 3+).\n",
+                    "maxLength": 65535
+                },
+                "notificationOptions": {
+                    "type": "object",
+                    "description": "Additional platform specific options.",
+                    "properties": {
+                        "bigText": {
+                            "type": "string",
+                            "description": "Android 4.1+ only.\nMulti line message shown in expanded notifications on Android 4.1+ devices.\nThe `notificationType` property must be set to `system`.\n",
+                            "maxLength": 4000
+                        },
+                        "bigPicture": {
+                            "type": "string",
+                            "description": "URL of a remote image displayed in expanded notifications on Android 4.1+ devices with the following constraints:\n\n  * The URL length is limited to 2000 characters.\n  * The image size must be less than 4 MiB.\n  * The following MIME types are supported:\n\n   * image/png\n   * image/jpeg\n   * image/gif\n   * image/webp\n   * image/bmp\n   * image/x-bmp\n   * image/x-ms-bmp\n\n  * URL scheme must be HTTP or HTTPS (with valid SSL certificate).\n  * Incompatible with `bigText`, only one of the fields can be set.\n  * The `notificationType` property must be set to `system`.\n",
+                            "maxLength": 2000
+                        },
+                        "sound": {
+                            "type": "string",
+                            "description": "iOS only.\nThe name of a sound file in the application bundle.\nThe sound in this file is played as an alert.\nIf the sound file doesn’t exist or default is specified as the value, the default alert sound is played.\nThe audio must be in one of the audio data formats that are compatible with system sounds.\n\nThe `deliveryTime` property must be set to `any` or `background`.\n"
+                        },
+                        "actionText": {
+                            "type": "string",
+                            "description": "The action text is the title of the right button of the alert or the value of the unlock slider, where the value replaces 'unlock' in 'slide to unlock'.\n'View' (localized to the preferred language) is used as the default value.\n\nThe `deliveryTime` property must be set to `any` or `background`.\n"
+                        }
+                    }
+                },
+                "title": {
+                    "type": "string",
+                    "description": "Title of the announcement or poll. This field supports appInfo markers.",
+                    "maxLength": 128
+                },
+                "body": {
+                    "type": "string",
+                    "description": "Body of the text/web announcement, poll or data push. This field supports appInfo markers.",
+                    "maxLength": 65535
+                },
+                "actionButtonText": {
+                    "type": "string",
+                    "description": "Text of the action button for text/web announcements and polls (answer button).",
+                    "maxLength": 64
+                },
+                "exitButtonText": {
+                    "type": "string",
+                    "description": "Text of the exit button for text/web announcements and polls.",
+                    "maxLength": 64
+                },
+                "actionUrl": {
+                    "type": "string",
+                    "description": "URL to launch when the announcement is actioned.",
+                    "maxLength": 2000
+                },
+                "localization": {
+                    "type": "object",
+                    "description": "Reach campaigns can be localized using an optional JSON object. The JSON key is a two-character language code as specified by the ISO 639-1 standard.\nThe corresponding value is an object containing the localizable properties: `title`, `body`, `notificationTitle`, `notificationMessage`, `notificationImage`, `notificationOptions`, `actionButtonText`, `exitButtonText`, `actionUrl`, `payload`.\n"
+                },
+                "questions": {
+                    "type": "array",
+                    "description": "Poll questions.",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "title": {
+                                "type": "string",
+                                "description": "Title of the question.",
+                                "maxLength": 256
+                            },
+                            "id": {
+                                "type": "integer",
+                                "description": "Unique identifier of the question."
+                            },
+                            "localization": {
+                                "type": "object",
+                                "description": "Poll questions can be localized using an optional JSON object. The JSON key is a two-character language code as specified by the ISO 639-1 standard. The corresponding value is an object containing the localizable property title.\n"
+                            },
+                            "choices": {
+                                "type": "array",
+                                "description": "List of possible choices for this question.",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "title": {
+                                            "type": "string",
+                                            "description": "Title of the choice.",
+                                            "maxLength": 256
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "description": "Unique identifier of the choice."
+                                        },
+                                        "localization": {
+                                            "type": "object",
+                                            "description": "Poll choices can be localized using an optional JSON object. The JSON key is a two-character language code as specified by the ISO 639-1 standard. The corresponding value is an object containing the localizable property title.\n"
+                                        },
+                                        "isDefault": {
+                                            "type": "boolean",
+                                            "description": "A flag indicating if this choice is the default choice for the associated question. Only one choice in the array can have this value set to true.",
+                                            "default": false
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "CampaignResourceAdditionalProperties": {
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "description": "Unique identifier of the campaign."
+                },
+                "state": {
+                    "type": "string",
+                    "description": "The current state of the campaign.",
+                    "enum": [
+                        "draft",
+                        "scheduled",
+                        "in-progress",
+                        "finished"
+                    ]
+                },
+                "activatedDate": {
+                    "type": "string",
+                    "description": "The date at which the campaign was activated (Not present if not yet activated).\nThe date conforms to the following format: yyyy-MM-dd HH:mm'Z' as specified by the ISO 8601 standard.\n"
+                },
+                "finishedDate": {
+                    "type": "string",
+                    "description": "The date at which the campaign was finished (Not present if not yet finished).\nThe date conforms to the following format: yyyy-MM-dd HH:mm'Z' as specified by the ISO 8601 standard.          \n"
+                }
+            }
+        },
+        "CampaignDetailedResource": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/CampaignResource"
+                },
+                {
+                    "$ref": "#/definitions/CampaignResourceAdditionalProperties"
+                }
+            ]
+        }
+    },
+    "parameters": {
+        "SubscriptionIdParameter": {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Gets subscription credentials which uniquely identify Microsoft Azure subscription. The subscription ID forms part of the URI for every service call."
+        },
+        "ApiVersionParameter": {
+            "name": "api-version",
+            "in": "query",
+            "required": true,
+            "type": "string",
+            "enum": [
+                "2014-12-01"
+            ],
+            "description": "Client Api Version."
+        },
+        "AuthorizationParameter": {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization token.",
+            "required": true,
+            "type": "string"
+        },
+        "ResourceGroupNameParameter": {
+            "name": "resourceGroupName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The name of the resource group."
+        },
+        "AppCollectionParameter": {
+            "name": "appCollection",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Application collection."
+        },
+        "AppNameParameter": {
+            "name": "appName",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Application resource name."
+        },
+        "CampaignKindParameter": {
             "name": "kind",
             "in": "path",
             "required": true,
             "type": "string",
-            "description": "Kind of campaign. Valid values are: announcements, polls, dataPushes, and nativePushes."
-          },
-          {
+            "enum": [
+                "announcements",
+                "polls",
+                "dataPushes",
+                "nativePushes"
+            ],
+            "description": "Campaign kind."
+        },
+        "CampaignIdParameter": {
             "name": "id",
             "in": "path",
             "required": true,
-            "type": "string",
-            "description": "Campaign identifier as returned by a call to Create campaign."
-          },
-          {
-            "name": "parameters",
-            "in": "body",
-            "description": "Device identifier.",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/CampaignTestParameters"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Test campaign queued successfully.",
-            "schema": {
-              "$ref": "#/definitions/CampaignTestResult"
-            }
-          },
-          "400": {
-            "description": "Invalid parameters or application is disabled. Check response body for details."
-          },
-          "401": {
-            "description": "Authentication error."
-          },
-          "404": {
-            "description": "No campaign was found with the specified id."
-          }
+            "type": "integer",
+            "description": "Campaign identifier."
         }
-      }
     }
-  },
-  "definitions": {
-    "CampaignTestParameters": {
-      "properties": {
-        "deviceId": {
-          "type": "string",
-          "description": "Device identifier (as returned by the SDK)."
-        },
-        "lang": {
-          "type": "string",
-          "description": "The language to test expressed using ISO 639-1 code. The default language of the campaign will be used if the parameter is not provided."
-        }
-      }
-    },
-    "CampaignTestResult": {
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Campaign identifier."
-        },
-        "state": {
-          "type": "string",
-          "description": "queued, it means the test push is being processed and should be received soon on devices."
-        }
-      }
-    }
-  },
-  "parameters": {
-   "AuthorizationParameter": {
-      "name": "authorization",
-      "in": "header",
-      "description": "Authorization token.",
-      "required": true,
-      "type": "string"
-    },
-    "SubscriptionIdParameter": {
-      "name": "subscriptionId",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "Azure SubscriptionId used as a URI path segment in API calls."
-    },
-    "ResourceGroupNameParameter": {
-      "name": "resourceGroupName",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "The name of the resource group."
-    },
-    "AppCollectionParameter": {
-      "name": "appCollection",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "App collection name."
-    },
-    "AppNameParameter": {
-      "name": "appName",
-      "in": "path",
-      "required": true,
-      "type": "string",
-      "description": "ResourceGroup name."
-    },
-    "ApiVersionParameter": {
-      "name": "api-version",
-      "in": "query",
-      "required": false,
-      "type": "string",
-      "description": "REST API Version."
-    }
-  }
 }
