@@ -16,6 +16,115 @@
         "application/json"
     ],
     "paths": {
+        "/subscriptions/{subscriptionId}/providers/Microsoft.MobileEngagement/appCollections": {
+            "get": {
+                "tags": [
+                    "AppCollections",
+                    "List"
+                ],
+                "operationId": "AppCollections_List",
+                "description": "Lists app collections in a subscription.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/AppCollectionListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps": {
+            "get": {
+                "operationId": "Apps_List",
+                "description": "Lists apps in an appCollection.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/AppListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/providers/Microsoft.MobileEngagement/supportedPlatforms": {
+            "get": {
+                "tags": [
+                    "List"
+                ],
+                "operationId": "SupportedPlatforms_List",
+                "description": "Lists supported platforms for Engagement applications.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/SupportedPlatformsListResult"
+                        }
+                    }
+                }
+            }
+        },
+        "/subscriptions/{subscriptionId}/providers/Microsoft.MobileEngagement/checkAppCollectionNameAvailability": {
+            "post": {
+                "operationId": "CheckAppCollectionNameAvailability",
+                "description": "Checks DNS availability of a name in the Engagement domain.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "name": "parameters",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/AppCollectionNameAvailability"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/AppCollectionNameAvailability"
+                        }
+                    }
+                }
+            }
+        },
         "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}": {
             "post": {
                 "tags": [
@@ -617,6 +726,149 @@
         }
     },
     "definitions": {
+        "AppListResult": {
+            "properties": {
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/App"
+                    },
+                    "description": "The list of Apps and their properties."
+                }
+            },
+            "description": "The list Apps operation response."
+        },
+        "App": {
+            "properties": {
+                "properties": {
+                    "$ref": "#/definitions/AppProperties"
+                }
+            },
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Resource"
+                }
+            ],
+            "description": "The Mobile Engagement App resource."
+        },
+        "AppProperties": {
+            "properties": {
+                "backendId": {
+                    "type": "string",
+                    "description": "The..."
+                },
+                "platform": {
+                    "type": "string",
+                    "description": "The platform of the app."
+                },
+                "appState": {
+                    "type": "string",
+                    "description": "The state of the application."
+                }
+            }
+        },
+        "AppCollectionListResult": {
+            "properties": {
+                "value": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/AppCollection"
+                    },
+                    "description": "The list of AppCollections and their properties."
+                }
+            },
+            "description": "The list AppCollections operation response."
+        },
+        "AppCollection": {
+            "properties": {
+                "properties": {
+                    "$ref": "#/definitions/AppCollectionProperties"
+                }
+            },
+            "allOf": [
+                {
+                    "$ref": "#/definitions/Resource"
+                }
+            ],
+            "description": "The AppCollection resource."
+        },
+        "AppCollectionProperties": {
+            "properties": {
+                "provisioningState": {
+                    "type": "string",
+                    "description": "Mobile Engagement AppCollection Properties.",
+                    "enum": [
+                        "Creating",
+                        "Succeeded"
+                    ],
+                    "x-ms-enum": {
+                        "name": "ProvisioningState",
+                        "modelAsString": "True"
+                    }
+                }
+            }
+        },
+        "AppCollectionNameAvailability": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "Name."
+                },
+                "available": {
+                    "type": "boolean",
+                    "description": "Available."
+                },
+                "unavailabilityReason": {
+                    "type": "string",
+                    "description": "UnavailabilityReason."
+                }
+            }
+        },
+        "SupportedPlatformsListResult": {
+            "properties": {
+                "platforms": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "description": "List of supported platforms."
+                }
+            }
+        },
+        "Resource": {
+            "properties": {
+                "id": {
+                    "readOnly": true,
+                    "type": "string",
+                    "description": "Resource Id"
+                },
+                "name": {
+                    "readOnly": true,
+                    "type": "string",
+                    "description": "Resource name"
+                },
+                "type": {
+                    "readOnly": true,
+                    "type": "string",
+                    "description": "Resource type"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "Resource location"
+                },
+                "tags": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "description": "Resource tags"
+                }
+            },
+            "required": [
+                "location"
+            ],
+            "x-ms-azure-resource": true
+        },
         "CampaignTestParameters": {
             "properties": {
                 "deviceId": {
