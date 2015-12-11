@@ -38,13 +38,20 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "$ref": "#/parameters/CampaignKindParameter"
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "announcements",
+                            "polls",
+                            "dataPushes",
+                            "nativePushes"
+                        ],
+                        "description": "Campaign kind."
                     },
                     {
                         "$ref": "#/parameters/ApiVersionParameter"
-                    },
-                    {
-                        "$ref": "#/parameters/AuthorizationParameter"
                     },
                     {
                         "name": "parameters",
@@ -96,16 +103,27 @@
                     "$ref": "#/parameters/AppNameParameter"
                 },
                 {
-                    "$ref": "#/parameters/CampaignKindParameter"
+                    "name": "kind",
+                    "in": "path",
+                    "required": true,
+                    "type": "string",
+                    "enum": [
+                        "announcements",
+                        "polls",
+                        "dataPushes",
+                        "nativePushes"
+                    ],
+                    "description": "Campaign kind."
                 },
                 {
-                    "$ref": "#/parameters/CampaignIdParameter"
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "type": "integer",
+                    "description": "Campaign identifier."
                 },
                 {
                     "$ref": "#/parameters/ApiVersionParameter"
-                },
-                {
-                    "$ref": "#/parameters/AuthorizationParameter"
                 }
             ],
             "get": {
@@ -217,7 +235,17 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "$ref": "#/parameters/CampaignKindParameter"
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "announcements",
+                            "polls",
+                            "dataPushes",
+                            "nativePushes"
+                        ],
+                        "description": "Campaign kind."
                     },
                     {
                         "name": "name",
@@ -228,9 +256,6 @@
                     },
                     {
                         "$ref": "#/parameters/ApiVersionParameter"
-                    },
-                    {
-                        "$ref": "#/parameters/AuthorizationParameter"
                     }
                 ],
                 "responses": {
@@ -252,68 +277,79 @@
                 }
             }
         },
-      "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
-        "post": {
-          "tags": [
-            "Campaign",
-            "Test"
-          ],
-          "operationId": "Campaigns_TestSaved",
-          "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
-          "parameters": [
-            {
-              "$ref": "#/parameters/SubscriptionIdParameter"
-            },
-            {
-              "$ref": "#/parameters/ResourceGroupNameParameter"
-            },
-            {
-              "$ref": "#/parameters/AppCollectionParameter"
-            },
-            {
-              "$ref": "#/parameters/AppNameParameter"
-            },
-            {
-              "$ref": "#/parameters/CampaignKindParameter"
-            },
-            {
-              "$ref": "#/parameters/CampaignIdParameter"
-            },
-            {
-              "$ref": "#/parameters/ApiVersionParameter"
-            },
-            {
-              "$ref": "#/parameters/AuthorizationParameter"
-            },
-            {
-              "name": "parameters",
-              "in": "body",
-              "description": "Parameters supplied to the Test Campaign operation.",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/CampaignTestParameters"
-              }
+        "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/{id}/test": {
+            "post": {
+                "tags": [
+                    "Campaign",
+                    "Test"
+                ],
+                "operationId": "Campaigns_TestSaved",
+                "description": "Test an existing campaign (created with Create campaign) on a set of devices.",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/SubscriptionIdParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/ResourceGroupNameParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppCollectionParameter"
+                    },
+                    {
+                        "$ref": "#/parameters/AppNameParameter"
+                    },
+                    {
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "announcements",
+                            "polls",
+                            "dataPushes",
+                            "nativePushes"
+                        ],
+                        "description": "Campaign kind."
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "Campaign identifier."
+                    },
+                    {
+                        "$ref": "#/parameters/ApiVersionParameter"
+                    },
+                    {
+                        "name": "parameters",
+                        "in": "body",
+                        "description": "Parameters supplied to the Test Campaign operation.",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/CampaignTestParameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Test campaign queued successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/CampaignStateResult"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid parameters or application is disabled. Check response body for details."
+                    },
+                    "401": {
+                        "description": "Authentication error."
+                    },
+                    "404": {
+                        "description": "No campaign was found with the specified id."
+                    }
+                }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Test campaign queued successfully.",
-              "schema": {
-                "$ref": "#/definitions/CampaignStateResult"
-              }
-            },
-            "400": {
-              "description": "Invalid parameters or application is disabled. Check response body for details."
-            },
-            "401": {
-              "description": "Authentication error."
-            },
-            "404": {
-              "description": "No campaign was found with the specified id."
-            }
-          }
-        }
-      },
+        },
         "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.MobileEngagement/appcollections/{appCollection}/apps/{appName}/campaigns/{kind}/test": {
             "post": {
                 "tags": [
@@ -339,9 +375,6 @@
                         "$ref": "#/parameters/ApiVersionParameter"
                     },
                     {
-                        "$ref": "#/parameters/AuthorizationParameter"
-                    },
-                    {
                         "name": "kind",
                         "in": "path",
                         "required": true,
@@ -355,20 +388,20 @@
                         "description": "Campaign kind."
                     },
                     {
-                      "name": "parameters",
-                      "in": "body",
-                      "description": "Parameters supplied to the Test Campaign operation.",
-                      "required": true,
-                      "schema": {
-                        "allOf": [
-                          {
-                            "$ref": "#/definitions/CampaignResource"
-                          },
-                          {
-                            "$ref": "#/definitions/CampaignTestParameters"
-                          }
-                        ]
-                      }
+                        "name": "parameters",
+                        "in": "body",
+                        "description": "Parameters supplied to the Test Campaign operation.",
+                        "required": true,
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/CampaignResource"
+                                },
+                                {
+                                    "$ref": "#/definitions/CampaignTestParameters"
+                                }
+                            ]
+                        }
                     }
                 ],
                 "responses": {
@@ -412,16 +445,27 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "$ref": "#/parameters/CampaignKindParameter"
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "announcements",
+                            "polls",
+                            "dataPushes",
+                            "nativePushes"
+                        ],
+                        "description": "Campaign kind."
                     },
                     {
-                        "$ref": "#/parameters/CampaignIdParameter"
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "Campaign identifier."
                     },
                     {
                         "$ref": "#/parameters/ApiVersionParameter"
-                    },
-                    {
-                        "$ref": "#/parameters/AuthorizationParameter"
                     }
                 ],
                 "responses": {
@@ -465,16 +509,27 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "$ref": "#/parameters/CampaignKindParameter"
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "announcements",
+                            "polls",
+                            "dataPushes",
+                            "nativePushes"
+                        ],
+                        "description": "Campaign kind."
                     },
                     {
-                        "$ref": "#/parameters/CampaignIdParameter"
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "Campaign identifier."
                     },
                     {
                         "$ref": "#/parameters/ApiVersionParameter"
-                    },
-                    {
-                        "$ref": "#/parameters/AuthorizationParameter"
                     }
                 ],
                 "responses": {
@@ -518,16 +573,27 @@
                         "$ref": "#/parameters/AppNameParameter"
                     },
                     {
-                        "$ref": "#/parameters/CampaignKindParameter"
+                        "name": "kind",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "enum": [
+                            "announcements",
+                            "polls",
+                            "dataPushes",
+                            "nativePushes"
+                        ],
+                        "description": "Campaign kind."
                     },
                     {
-                        "$ref": "#/parameters/CampaignIdParameter"
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "type": "integer",
+                        "description": "Campaign identifier."
                     },
                     {
                         "$ref": "#/parameters/ApiVersionParameter"
-                    },
-                    {
-                        "$ref": "#/parameters/AuthorizationParameter"
                     }
                 ],
                 "responses": {
@@ -565,21 +631,21 @@
         },
         "CampaignStateResult": {
             "allOf": [
-              {
-                "$ref": "#/definitions/CampaignStateOnlyResult"
-              },
-              {
-                "type": "string",
-                  "required": [
-                     "deviceId"
-                  ],
-                "properties": {
-                  "deviceId": {
+                {
+                    "$ref": "#/definitions/CampaignStateOnlyResult"
+                },
+                {
                     "type": "string",
-                    "description": "Device identifier (as returned by the SDK)."
+                    "required": [
+                        "deviceId"
+                    ],
+                    "properties": {
+                        "deviceId": {
+                            "type": "string",
+                            "description": "Device identifier (as returned by the SDK)."
+                        }
                     }
                 }
-              }
             ]
         },
         "CampaignStateOnlyResult": {
@@ -609,11 +675,11 @@
                 },
                 "audience": {
                     "type": "object",
-                    "description": "Specify which users will be targeted by this campaign. By default, all users will be targeted.\nIf you set `pushMode` property to `manual`, the only thing you can specify in the audience is the push quota filter.\n\nAn audience is a boolean expression made of criteria (variables) operators (“not”, “and” or “or”) and parenthesis. Additionally, a set of filters can be added to an audience.\n\n65535 bytes max as per JSON encoding.\n",
+                    "description": "Specify which users will be targeted by this campaign. By default, all users will be targeted.\nIf you set `pushMode` property to `manual`, the only thing you can specify in the audience is the push quota filter.\nAn audience is a boolean expression made of criteria (variables) operators (“not”, “and” or “or”) and parenthesis. Additionally, a set of filters can be added to an audience.\n65535 bytes max as per JSON encoding.\n",
                     "properties": {
                         "expression": {
                             "type": "string",
-                            "description": "Boolean expression made of criteria (variables) operators (“not”, “and” or “or”) and parenthesis.\nCriterion names in the audience expression must start with a capital letter and can only contain alphanumeric (A-Z,a-z,0-9) and underscore (_) characters.              \n"
+                            "description": "Boolean expression made of criteria (variables) operators (“not”, “and” or “or”) and parenthesis.\nCriterion names in the audience expression must start with a capital letter and can only contain alphanumeric (A-Z,a-z,0-9) and underscore (_) characters.\n"
                         },
                         "criteria": {
                             "type": "object"
@@ -634,7 +700,7 @@
                 },
                 "pushMode": {
                     "type": "string",
-                    "description": "Announcements/polls only.\nDefines how the campaign is pushed. Valid values are:\n\n  * `real-time`: Never ending campaign, the campaign will be delivered to your existing users and also to your new users.\n  * `one-shot`: In this mode, the campaign will be delivered only to your existing users (campaign will stop after that).\n  * `manual`: In this mode, the campaign will not be pushed automatically to devices. You will have to use the Push campaign command to push the campaign to your end-users. Campaigns can be pushed multiple times to the same device.\n",
+                    "description": "Announcements/polls only.\nDefines how the campaign is pushed. Valid values are:\n* `real-time`: Never ending campaign, the campaign will be delivered  to your existing users and also to your new users.\n* `one-shot`: In this mode, the campaign will be delivered only to your existing users (campaign will stop after that).\n* `manual`: In this mode, the campaign will not be pushed automatically to devices.\nYou will have to use the Push campaign command to push the campaign to your end-users.\nCampaigns can be pushed multiple times to the same device.\n",
                     "enum": [
                         "real-time",
                         "one-shot",
@@ -644,7 +710,7 @@
                 },
                 "type": {
                     "type": "string",
-                    "description": "Applicable only to announcements and data pushes.\n\nType of announcement. Valid values are:\n\n  * `text/plain`: Text-only announcement: `body` property should only contain plain text.\n  * `text/html`: HTML announcement: `body` attribute can contain HTML code.\n  * `only_notif`: Notification-only announcement. With this kind of announcements, the `body`, `title`, `actionButtonText` and `exitButtonText` are ignored.\n\nType of data push. Valid values are:\n\n  * `text/plain`: Text only data push: `body` property must be text plain.\n  * `text/base64`: Base 64 data push: `body` property must be encoded in base 64.\n",
+                    "description": "Applicable only to announcements and data pushes.\nType of announcement. Valid values are:\n* `text/plain`: Text-only announcement: `body` property should only contain plain text.\n* `text/html`: HTML announcement: `body` attribute can contain HTML code.\n* `only_notif`: Notification-only announcement. With this kind of announcements, the `body`, `title`, `actionButtonText` and `exitButtonText` are ignored.\nType of data push. Valid values are:\n* `text/plain`: Text only data push: `body` property must be plain text.\n* `text/base64`: Base 64 data push: `body` property must be encoded in base 64.\n",
                     "enum": [
                         "text/plain",
                         "text/html",
@@ -654,7 +720,7 @@
                 },
                 "deliveryTime": {
                     "type": "string",
-                    "description": "Announcements/polls only.\nDefines when the campaign should be delivered. Valid values are:\n\n  * `any`: Campaign will be delivered as soon as possible.\n  * `background`: iOS only. Campaign will be only delivered when the application is in background (out of app).\n  * `session`: Campaign will be delivered when the application is running.\n",
+                    "description": "Announcements/polls only.\nDefines when the campaign should be delivered. Valid values are:\n* `any`: Campaign will be delivered as soon as possible.\n* `background`: iOS only. Campaign will be only delivered when the application is in background (out of app).\n* `session`: Campaign will be delivered when the application is running.\n",
                     "enum": [
                         "any",
                         "background",
@@ -663,26 +729,26 @@
                 },
                 "deliveryActivities": {
                     "type": "array",
-                    "description": "Announcements/polls only.\nArray containing the list of activities in which the campaign can be delivered.\ndeliveryTime must be set to session.\nIf the platform is iOS, this option can also be set if deliveryTime is set to any.\nIn that case, if the campaign is received when the application is launched,\nit will be delivered only in the specified list of activities.\n",
+                    "description": "Announcements/polls only.\nArray containing the list of activities in which the campaign can be delivered.\ndeliveryTime must be set to session.\nIf the platform is iOS, this option can also be set if deliveryTime is set to any.\nIn that case, if the campaign is received when the application is launched, it will be delivered only in the specified list of activities.\n",
                     "items": {
                         "type": "string"
                     }
                 },
                 "startTime": {
                     "type": "string",
-                    "description": "The date at which the campaign should be started.\nThe date shall conform to the following format: `yyyy-MM-dd HH:mm'Z'`.\n\n  * If you set pushMode property to manual, this attribute will be ignored.\n  * If you set pushMode property to one-shot, then the timezone attribute must be specified.\n\nExample: `2011-11-21 15:23Z`\n"
+                    "description": "The date at which the campaign should be started.\nThe date shall conform to the following format: `yyyy-MM-dd HH:mm'Z'`.\n* If you set pushMode property to manual, this attribute will be ignored.\n* If you set pushMode property to one-shot, then the timezone attribute must be specified.\nExample: `2011-11-21 15:23Z`\n"
                 },
                 "endTime": {
                     "type": "string",
-                    "description": "The date at which the campaign should be finished.\nThe date shall conform to the following format: `yyyy-MM-dd HH:mm'Z'`.\n\nExample: `2011-11-21 15:23Z`\n"
+                    "description": "The date at which the campaign should be finished.\nThe date shall conform to the following format: `yyyy-MM-dd HH:mm'Z'`.\nExample: `2011-11-21 15:23Z`\n"
                 },
                 "timezone": {
                     "type": "string",
-                    "description": "The id of the time zone to use for the startTime and endTime dates.\nIf not provided, the two date attributes will be expressed using the device timezone.\n\nExample: America/Los_Angeles\n"
+                    "description": "The id of the time zone to use for the startTime and endTime dates.\nIf not provided, the two date attributes will be expressed using the device timezone.\nExample: America/Los_Angeles\n"
                 },
                 "notificationType": {
                     "type": "string",
-                    "description": "Android only.\nDefines how the notification should be displayed. Valid values are:\n\n  * `system`: Display the notification using a standard system notification.\n  * `popup`: Display the notification using a in-app banner notification.\n",
+                    "description": "Android only.\nDefines how the notification should be displayed. Valid values are:\n* `system`: Display the notification using a standard system notification.\n* `popup`: Display the notification using a in-app banner notification.\n",
                     "enum": [
                         "system",
                         "popup"
@@ -741,16 +807,16 @@
                         },
                         "bigPicture": {
                             "type": "string",
-                            "description": "URL of a remote image displayed in expanded notifications on Android 4.1+ devices with the following constraints:\n\n  * The URL length is limited to 2000 characters.\n  * The image size must be less than 4 MiB.\n  * The following MIME types are supported:\n\n   * image/png\n   * image/jpeg\n   * image/gif\n   * image/webp\n   * image/bmp\n   * image/x-bmp\n   * image/x-ms-bmp\n\n  * URL scheme must be HTTP or HTTPS (with valid SSL certificate).\n  * Incompatible with `bigText`, only one of the fields can be set.\n  * The `notificationType` property must be set to `system`.\n",
+                            "description": "URL of a remote image displayed in expanded notifications on\nAndroid 4.1+ devices with the following constraints:\n* The URL length is limited to 2000 characters.\n* The image size must be less than 4 MiB.\n* The following MIME types are supported:\n** image/png\n** image/jpeg\n** image/gif\n** image/webp\n** image/bmp\n** image/x-bmp\n** image/x-ms-bmp\n* URL scheme must be HTTP or HTTPS (with valid SSL certificate).\n* Incompatible with `bigText`, only one of the fields can be set.\n* The `notificationType` property must be set to `system`.\n",
                             "maxLength": 2000
                         },
                         "sound": {
                             "type": "string",
-                            "description": "iOS only.\nThe name of a sound file in the application bundle.\nThe sound in this file is played as an alert.\nIf the sound file doesn’t exist or default is specified as the value, the default alert sound is played.\nThe audio must be in one of the audio data formats that are compatible with system sounds.\n\nThe `deliveryTime` property must be set to `any` or `background`.\n"
+                            "description": "iOS only.\nThe name of a sound file in the application bundle.\nThe sound in this file is played as an alert.\nIf the sound file doesn’t exist or default is specified as the value, the default alert sound is played.\nThe audio must be in one of the audio data formats that are compatible with system sounds.\nThe `deliveryTime` property must be set to `any` or `background`.\n"
                         },
                         "actionText": {
                             "type": "string",
-                            "description": "The action text is the title of the right button of the alert or the value of the unlock slider, where the value replaces 'unlock' in 'slide to unlock'.\n'View' (localized to the preferred language) is used as the default value.\n\nThe `deliveryTime` property must be set to `any` or `background`.\n"
+                            "description": "The action text is the title of the right button of the alert or the value of the unlock slider, where the value replaces 'unlock' in 'slide to unlock'.\n'View' (localized to the preferred language) is used as the default value.\nThe `deliveryTime` property must be set to `any` or `background`.\n"
                         }
                     }
                 },
@@ -856,7 +922,7 @@
                 },
                 "finishedDate": {
                     "type": "string",
-                    "description": "The date at which the campaign was finished (Not present if not yet finished).\nThe date conforms to the following format: yyyy-MM-dd HH:mm'Z' as specified by the ISO 8601 standard.          \n"
+                    "description": "The date at which the campaign was finished (Not present if not yet finished).\nThe date conforms to the following format: yyyy-MM-dd HH:mm'Z' as specified by the ISO 8601 standard.\n"
                 }
             }
         },
@@ -889,13 +955,6 @@
             ],
             "description": "Client Api Version."
         },
-        "AuthorizationParameter": {
-            "name": "Authorization",
-            "in": "header",
-            "description": "Authorization token.",
-            "required": true,
-            "type": "string"
-        },
         "ResourceGroupNameParameter": {
             "name": "resourceGroupName",
             "in": "path",
@@ -916,26 +975,6 @@
             "required": true,
             "type": "string",
             "description": "Application resource name."
-        },
-        "CampaignKindParameter": {
-            "name": "kind",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "enum": [
-                "announcements",
-                "polls",
-                "dataPushes",
-                "nativePushes"
-            ],
-            "description": "Campaign kind."
-        },
-        "CampaignIdParameter": {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "integer",
-            "description": "Campaign identifier."
         }
     }
 }
